@@ -49,18 +49,14 @@ const root = {
   },
   updateMessage: async ({id, input}) => {
     try {
-      const message = await Message.findOne({id});
-      if (!message) {
-        throw new Error('no message exists with id ' + id);
+      const updateValue = {
+        updatedAt: Date.now(),
+        ...input,
       }
 
-      const newMessage = {
-        ...message,
-        ...input,
-        updatedAt: Date.now()
-      };
-
-      void Message.updateOne({id}, newMessage);
+      const newMessage = await Message.findOneAndUpdate({id}, updateValue, {
+        new: true
+      });
 
       return newMessage;
     } catch (error) {
