@@ -1,0 +1,31 @@
+mutation createMessage {
+  createMessage(input: {
+    content: "Hello world",
+    author: "Firman"
+  }){
+    id
+    content
+    author
+  }
+}
+
+mutation updateMessage {
+  updateMessage(id:"ef1aa8feaea7d7459df0",input: {
+    content: "Updated message",
+    author: "Firman"
+  }){
+    id
+    content
+    author
+  }
+}
+
+query {
+  getMessageList{
+    id
+    content
+    author
+    createdAt
+    updatedAt
+  }
+}
