@@ -63,6 +63,19 @@ const root = {
       console.log(error);
     }
   },
+  deleteMessage: async ({id}) => {
+    try {
+      const {deletedCount} = await Message.deleteOne({id});
+
+      if(deletedCount !== 1) {
+        throw new Error(`Failed to delete ${id}`);
+      }
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  },
 };
 
 const app = express();

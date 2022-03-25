@@ -23,6 +23,7 @@ const schema = buildSchema(`
   type Mutation {
     createMessage(input: MessageInput): Message
     updateMessage(id: ID!, input: MessageInput): Message
+    deleteMessage(id: ID!): Boolean
   }
 `);
 
