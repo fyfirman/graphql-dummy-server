@@ -29,7 +29,7 @@ services:
       - mongodb
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     restart: unless-stopped
     env_file: ./.env
     ports:
@@ -42,8 +42,5 @@ services:
       - MONGODB_PORT=$MONGODB_DOCKER_PORT
     stdin_open: true
     tty: true
-    volumes:
-      - '.:/app'
 volumes:
   db:
-  app:

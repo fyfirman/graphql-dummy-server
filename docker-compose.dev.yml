@@ -1,0 +1,49 @@
+version: "3.8"
+services:
+  mongodb:
+    image: mongo:5.0.2
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$MONGODB_USER
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PASSWORD
+    ports:
+      - $MONGODB_LOCAL_PORT:$MONGODB_DOCKER_PORT
+    volumes:
+      - db:/data/db
+  mongo-express:
+    image: mongo-express:latest
+    env_file: ./.env
+    depends_on:
+      - mongodb
+    environment:
+      - ME_CONFIG_BASICAUTH_USERNAME=$MONGODB_USER
+      - ME_CONFIG_BASICAUTH_PASSWORD=$MONGODB_PASSWORD
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=$MONGODB_USER
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=$MONGODB_PASSWORD
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+    ports:
+      - $MONGO_EXPRESS_PORT:8081
+  app:
+    depends_on:
+      - mongodb
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+    environment:
+      - MONGODB_HOST=mongodb
+      - MONGODB_USER=$MONGODB_USER
+      - MONGODB_PASSWORD=$MONGODB_PASSWORD
+      - MONGODB_NAME=$MONGODB_DATABASE
+      - MONGODB_PORT=$MONGODB_DOCKER_PORT
+    stdin_open: true
+    tty: true
+    volumes:
+      - '.:/app'
+volumes:
+  db:
+  app:
